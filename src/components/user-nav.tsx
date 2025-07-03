@@ -1,7 +1,5 @@
-"use client";
-
 import { LogOut, Settings, User } from "lucide-react";
-
+import { useNavigate } from "react-router-dom"; // Use react-router-dom
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -13,6 +11,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function UserNav() {
+  const navigate = useNavigate(); // Replace useRouter with useNavigate
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
+
+      // Redirect to login page after successful logout
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("Failed to log out. Please try again.");
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -48,7 +70,7 @@ export function UserNav() {
           <span>Settings</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
