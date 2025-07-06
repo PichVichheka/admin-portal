@@ -1,10 +1,12 @@
 export interface Root {
   message: string;
-  data: IProfileResponse;
+  data: fetchProfile;
 }
 
-export interface IProfileResponse {
+export interface fetchProfile {
   id: string;
+  error: string;
+  profile: string | null;
   full_name: string;
   user_name: string;
   email: string;
