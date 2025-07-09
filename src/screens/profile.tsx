@@ -334,7 +334,9 @@ interface ApiResponse {
   full_name: string;
   user_name: string;
   email: string;
+  password: string;
   avatar: string | null;
+  is_deleted: boolean;
   is_active: boolean;
   roles: string;
   created_at: string;
