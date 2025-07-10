@@ -43,7 +43,7 @@ dayjs.extend(timezone);
 
 const UsersTable = () => {
   const queryClient = useQueryClient();
-  const { UPDATE_USER } = requestUser();
+  const { UPDATE_USER, DELETE_USER } = requestUser();
   const { mutate: updateUserStatus, isPending: isUpdating } = useMutation({
     mutationFn: ({ id, status }: { id: string; status: boolean }) =>
       UPDATE_USER(id, status),
@@ -51,6 +51,13 @@ const UsersTable = () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
+  const { mutate: deleteUser } = useMutation({
+    mutationFn: (id: string) => DELETE_USER(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+
   const { USERS } = requestUser();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -92,6 +99,8 @@ const UsersTable = () => {
       }),
     // keepPreviousData: true, // This helps with smooth pagination transitions
   });
+
+  // Remove duplicate requestUser function definition here.
 
   const columns: ColumnDef<IUser>[] = [
     {
@@ -241,15 +250,26 @@ const UsersTable = () => {
       id: "actions",
       header: "Action",
       enableHiding: false,
+
       cell: () => {
+      cell: ({ row }) => {
+        const user = row.original;
+
         return (
           <div className="flex space-x-1.5 items-center">
             <Badge>
               <Pen />
               Edit
             </Badge>
-            <Badge variant="destructive">
-              <Trash /> Delete
+            <Badge
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={() => {
+                deleteUser(user.id);
+              }}
+            >
+              <Trash size={16} />
+              Delete
             </Badge>
           </div>
         );
