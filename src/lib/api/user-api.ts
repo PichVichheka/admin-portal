@@ -1,4 +1,4 @@
-import type { IUserResponse } from "@/types/user-type";
+import type { IUserResponse, IUserUpdate } from "@/types/user-type";
 import request from "./request";
 
 type UserQueryParams = {
@@ -33,6 +33,21 @@ export const requestUser = () => {
       },
     });
   };
+
+  const UPDATE_USER_FIELD = async (id: string, payload: IUserUpdate) => {
+    return await request({
+      url: `/user/update-user/${id}`,
+      method: "PUT",
+      data: payload,
+    });
+  };
+  const FETCH_USER_ID = async (id: string) => {
+    return await request({
+      url: `/user/${id}`,
+      method: "GET",
+    });
+  };
+
   const DELETE_USER = async (id: string) => {
     return await request({
       url: `/user/delete-user/${id}`,
@@ -43,6 +58,8 @@ export const requestUser = () => {
   return {
     USERS,
     UPDATE_USER,
+    UPDATE_USER_FIELD,
+    FETCH_USER_ID,
     DELETE_USER,
   };
 };

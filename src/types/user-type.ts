@@ -62,3 +62,11 @@ export interface IUserResponse {
     limit: number;
   };
 }
+
+export type IUserUpdate = {
+  full_name?: string;
+  user_name?: string;
+  email?: string;
+  password?: string;
+  is_active?: boolean;
+};
