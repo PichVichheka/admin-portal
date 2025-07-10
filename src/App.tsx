@@ -7,9 +7,8 @@ import { useAuthStore } from "@/store/auth-store";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/protect-route";
 import Users from "./screens/users";
+import Card from "./screens/card";
 import Profile from "./screens/profile";
-import { Card } from "./components/ui/card";
-import Cards from "./screens/cards";
 
 function App() {
   const checkAuth = useAuthStore((s) => s.checkAuth);
@@ -30,8 +29,9 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/cards" element={<Card />} />
+            {/* Add more routes as needed */}
             <Route path="/profile" element={<Profile />} />
-            <Route path="/cards" element={<Cards />} />
           </Route>
         </Route>
       </Routes>
