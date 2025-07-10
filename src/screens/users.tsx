@@ -37,6 +37,7 @@ import timezone from "dayjs/plugin/timezone";
 import { Badge } from "@/components/ui/badge";
 import { useUserStatusDialog } from "@/store/user-status-dialog-store";
 import UserStatusAlertDialog from "@/components/user-status-dialong";
+import { useUserEditModal } from "@/constants/user-edit";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -255,7 +256,11 @@ const UsersTable = () => {
 
         return (
           <div className="flex space-x-1.5 items-center">
-            <Badge>
+            <Badge
+              variant="outline"
+              className="cursor-pointer bg-green-500 text-white"
+              onClick={() => useUserEditModal.getState().open(user.id)}
+            >
               <Pen />
               Edit
             </Badge>
@@ -263,7 +268,11 @@ const UsersTable = () => {
               variant="destructive"
               className="cursor-pointer"
               onClick={() => {
-                deleteUser(user.id);
+                if (
+                  window.confirm(`Are you sure to delete ${user.full_name}?`)
+                ) {
+                  deleteUser(user.id);
+                }
               }}
             >
               <Trash size={16} />
@@ -307,7 +316,6 @@ const UsersTable = () => {
         }}
         isLoading={isUpdating}
       />
-      ;
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
       </div>

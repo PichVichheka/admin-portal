@@ -2,6 +2,7 @@ import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "./app-sidebar";
 import { Outlet } from "react-router";
 import { SiteHeader } from "./sidebar-header";
+import { UserEditModal } from "../ui/popup";
 
 const DashboardLayout: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const DashboardLayout: React.FC = () => {
         <SiteHeader />
         <Outlet />
       </SidebarInset>
+      <UserEditModal />
     </SidebarProvider>
   );
 };
