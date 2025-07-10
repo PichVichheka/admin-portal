@@ -67,9 +67,10 @@ const CardsTable = () => {
   });
   console.log("Cards Data:", data);
 
-  const columns: ColumnDef<ICard>[] = [
+  const columns: ColumnDef<ICard, any>[] = [
     {
       id: "select",
+      accessorFn: (row) => row.id,
       header: ({ table }) => (
         <Checkbox
           checked={
@@ -87,16 +88,16 @@ const CardsTable = () => {
       ),
     },
     {
-      accessorKey: "full_name",
       accessorFn: (row) => `${row.user.full_name}`,
+      id: "full_name",
       header: "FullName",
       cell: ({ row }) => {
         return <div className="capitalize">{row.getValue("full_name")}</div>;
       },
     },
     {
-      accessorKey: "user_name",
       accessorFn: (row) => `${row.user.user_name}`,
+      id: "user_name",
       header: "User Name",
       cell: ({ row }) => <div>{row.getValue("user_name")}</div>,
     },

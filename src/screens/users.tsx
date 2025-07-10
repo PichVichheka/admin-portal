@@ -250,8 +250,6 @@ const UsersTable = () => {
       id: "actions",
       header: "Action",
       enableHiding: false,
-
-      cell: () => {
       cell: ({ row }) => {
         const user = row.original;
 
@@ -304,6 +302,7 @@ const UsersTable = () => {
       {/* //alert dailong to update status */}
       <UserStatusAlertDialog
         onConfirm={(userId, newStatus) => {
+          m;
           updateUserStatus({ id: userId, status: newStatus });
         }}
         isLoading={isUpdating}

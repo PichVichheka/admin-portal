@@ -28,7 +28,7 @@ function App() {
         <Route element={<ProtectedRoute roles={["admin", "super_admin"]} />}>
           <Route element={<DashboardLayout />}>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/users" element={<Users />
+            <Route path="/users" element={<Users />} />
             <Route path="/cards" element={<Card />} />
             {/* Add more routes as needed */}
             <Route path="/profile" element={<Profile />} />
