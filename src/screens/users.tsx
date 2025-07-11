@@ -37,12 +37,13 @@ import timezone from "dayjs/plugin/timezone";
 import { Badge } from "@/components/ui/badge";
 import { useUserStatusDialog } from "@/store/user-status-dialog-store";
 import UserStatusAlertDialog from "@/components/user-status-dialong";
-import { useUserEditModal } from "@/constants/user-edit";
+import { useUserEditModal } from "@/store/user-edit";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const UsersTable = () => {
+  const { setCurrentUserData } = useUserEditModal();
   const queryClient = useQueryClient();
   const { UPDATE_USER, DELETE_USER } = requestUser();
   const { mutate: updateUserStatus, isPending: isUpdating } = useMutation({
@@ -259,7 +260,14 @@ const UsersTable = () => {
             <Badge
               variant="outline"
               className="cursor-pointer bg-green-500 text-white"
-              onClick={() => useUserEditModal.getState().open(user.id)}
+              onClick={() => {
+                setCurrentUserData({
+                  id: user?.id,
+                  full_name: user?.full_name,
+                  email: user?.email,
+                  user_name: user?.user_name,
+                });
+              }}
             >
               <Pen />
               Edit
