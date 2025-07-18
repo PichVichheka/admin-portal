@@ -1,4 +1,15 @@
 import React, { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+
 import { requestUser } from "@/lib/api/user-api";
 import {
   type ColumnDef,
@@ -261,6 +272,7 @@ const UsersTable = () => {
               variant="outline"
               className="cursor-pointer bg-green-500 text-white"
               onClick={() => {
+                useUserEditModal.getState().open(user.id);
                 setCurrentUserData({
                   id: user?.id,
                   full_name: user?.full_name,
@@ -272,20 +284,33 @@ const UsersTable = () => {
               <Pen />
               Edit
             </Badge>
-            <Badge
-              variant="destructive"
-              className="cursor-pointer"
-              onClick={() => {
-                if (
-                  window.confirm(`Are you sure to delete ${user.full_name}?`)
-                ) {
-                  deleteUser(user.id);
-                }
-              }}
-            >
-              <Trash size={16} />
-              Delete
-            </Badge>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Badge variant="destructive" className="cursor-pointer">
+                  <Trash size={16} />
+                  Delete
+                </Badge>
+              </AlertDialogTrigger>
+
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to delete{" "}
+                    <span className="font-semibold">{user.full_name}</span>?
+                  </AlertDialogTitle>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => deleteUser(user.id)}
+                    className="bg-red-600 text-white hover:bg-red-700"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         );
       },

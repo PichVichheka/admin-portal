@@ -1,4 +1,3 @@
-// components/user-edit-modal.tsx
 "use client";
 
 import {
@@ -21,12 +20,6 @@ export function UserEditModal() {
   const { isOpen, close, userId } = useUserEditModal();
   const queryClient = useQueryClient();
   const [form, setForm] = useState({ full_name: "", user_name: "", email: "" });
-
-  // const { data: user, isLoading } = useQuery({
-  //   queryKey: ["user"],
-  //   queryFn: () => FETCH_USER_ID(userId!),
-  //   enabled: !!userId && isOpen,
-  // });
 
   useEffect(() => {
     if (!isOpen)
