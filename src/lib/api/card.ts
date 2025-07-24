@@ -51,7 +51,7 @@ export const requestCard = () => {
 
   const DELETE_CARD = async (id: string) => {
     return await request({
-      url: `/api/v1/card/delete-card-by-admin/${id}`,
+      url: `/card/delete-card-by-admin/${id}`,
       method: "DELETE",
     });
   };
