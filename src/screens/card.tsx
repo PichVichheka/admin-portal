@@ -4,6 +4,17 @@
 
 import { useState } from "react";
 import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { Trash } from "lucide-react";
+import {
   useReactTable,
   getCoreRowModel,
   flexRender,
@@ -12,6 +23,7 @@ import {
 } from "@tanstack/react-table";
 import { useQuery } from "@tanstack/react-query";
 import { requestCard } from "@/lib/api/card";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Table,
   TableHeader,
@@ -21,10 +33,10 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
 import dayjs from "dayjs";
 import { Pagination } from "@/lib/pagination";
+import { Dialog } from "@radix-ui/react-dialog";
+import { Badge } from "@/components/ui/badge";
 
 // Type for each card
 interface ICard {
@@ -44,8 +56,8 @@ interface ICard {
 }
 
 const CardsTable = () => {
-  const { GET_CARDS } = requestCard();
-
+  const { GET_CARDS, DELETE_CARD } = requestCard();
+  const queryClient = useQueryClient();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -66,6 +78,12 @@ const CardsTable = () => {
       }),
   });
   console.log("Cards Data:", data);
+  const { mutate: deletecard } = useMutation({
+    mutationFn: (id: string) => DELETE_CARD(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cards"] });
+    },
+  });
 
   const columns: ColumnDef<ICard, any>[] = [
     {
@@ -131,6 +149,47 @@ const CardsTable = () => {
       cell: ({ row }) => {
         const date = row.getValue("created_at") as string;
         return <div>{dayjs(date).format("YYYY-MM-DD hh:mm A")}</div>;
+      },
+    },
+    {
+      id: "actions",
+      header: "Action",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const card = row.original;
+
+        return (
+          <div className="flex space-x-1.5 items-center">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Badge variant="destructive" className="cursor-pointer">
+                  <Trash size={16} />
+                  Delete
+                </Badge>
+              </AlertDialogTrigger>
+
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to delete{" "}
+                    <span className="font-semibold">{card.user.full_name}</span>
+                    ?
+                  </AlertDialogTitle>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => deletecard(card.id)}
+                    className="bg-red-600 text-white hover:bg-red-700"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        );
       },
     },
   ];
